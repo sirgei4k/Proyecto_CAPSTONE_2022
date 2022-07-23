@@ -1,0 +1,184 @@
+[
+    {
+        "id": "abd7ae60e2ad11d1",
+        "type": "tab",
+        "label": "Flow 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "99745a99519ca1fe",
+        "type": "mqtt in",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "topic": "/capstone/proyecto/temperatura",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "0fc2fbe4c621435a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 250,
+        "y": 140,
+        "wires": [
+            [
+                "45e1cb46630559fc"
+            ]
+        ]
+    },
+    {
+        "id": "45e1cb46630559fc",
+        "type": "debug",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "2f02de7c9aa7c305",
+        "type": "mqtt in",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "topic": "/capstone/proyecto/humedad",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "0fc2fbe4c621435a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 220,
+        "wires": [
+            [
+                "c8a0188bce3ad868"
+            ]
+        ]
+    },
+    {
+        "id": "36a6e6acbd2e9dda",
+        "type": "mqtt in",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "topic": "/capstone/proyecto/ph",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "0fc2fbe4c621435a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 220,
+        "y": 300,
+        "wires": [
+            [
+                "66dabafc5d9f85b1"
+            ]
+        ]
+    },
+    {
+        "id": "d2ce5de1ea619993",
+        "type": "mqtt in",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "topic": "/capstone/proyecto/conductividad",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "0fc2fbe4c621435a",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 260,
+        "y": 380,
+        "wires": [
+            [
+                "9c25f16eb7681100"
+            ]
+        ]
+    },
+    {
+        "id": "c8a0188bce3ad868",
+        "type": "debug",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 610,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "66dabafc5d9f85b1",
+        "type": "debug",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "9c25f16eb7681100",
+        "type": "debug",
+        "z": "abd7ae60e2ad11d1",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "0fc2fbe4c621435a",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "mamalon4565456",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    }
+]
