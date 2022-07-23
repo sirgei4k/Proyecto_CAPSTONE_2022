@@ -19,18 +19,18 @@ float val_ph=0;
 
 //Sensor conductividad
 #define TdsSensorPin A1
-#define VREF 5.0              // analog reference voltage(Volt) of the ADC
-#define SCOUNT  30            // sum of sample point
-int analogBuffer[SCOUNT];     // store the analog value in the array, read from ADC
+#define VREF 5.0              // Referencia analogica de 5 V(Volt) del ADC
+#define SCOUNT  30            // suma de muestras
+int analogBuffer[SCOUNT];     // arreglo para almacenar los valores analogicos de ADC
 int analogBufferTemp[SCOUNT];
 int analogBufferIndex = 0;
 int copyIndex = 0;
 
 float averageVoltage = 0;
 float tdsValue = 0;
-float temperature = 16;       // current temperature for compensation
+float temperature = 16;       //temperatura de compensación
 
-// median filtering algorithm
+// algoritmo de filtro de mediana
 int getMedianNum(int bArray[], int iFilterLen){
   int bTab[iFilterLen];
   for (byte i = 0; i<iFilterLen; i++)
@@ -58,12 +58,12 @@ int getMedianNum(int bArray[], int iFilterLen){
 
 
 void setup() {
-  // put your setup code here, to run once:
+  
 lcd.begin(16, 2);
     
     lcd.setRGB(colorR, colorG, colorB);
     
-    // Print a message to the LCD.
+    
     lcd.print("Bienvenido");delay(1000);
     Serial.begin(9600);
     pinMode(TdsSensorPin,INPUT);
@@ -71,7 +71,7 @@ lcd.begin(16, 2);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  
 int humedad=analogRead(pin_sensor_humedad);
 funcion_tds();
 funcion_ph();
@@ -89,9 +89,9 @@ delay(1000);
 
 float funcion_tds(){
   static unsigned long analogSampleTimepoint = millis();
-  if(millis()-analogSampleTimepoint > 40U){     //every 40 milliseconds,read the analog value from the ADC
+  if(millis()-analogSampleTimepoint > 40U){     //sensa cada 40 mili segundos 
     analogSampleTimepoint = millis();
-    analogBuffer[analogBufferIndex] = analogRead(TdsSensorPin);    //read the analog value and store into the buffer
+    analogBuffer[analogBufferIndex] = analogRead(TdsSensorPin);    //lee el valor analogico y lo almacena en el buffer
     analogBufferIndex++;
     if(analogBufferIndex == SCOUNT){ 
       analogBufferIndex = 0;
@@ -104,15 +104,15 @@ float funcion_tds(){
     for(copyIndex=0; copyIndex<SCOUNT; copyIndex++){
       analogBufferTemp[copyIndex] = analogBuffer[copyIndex];
       
-      // read the analog value more stable by the median filtering algorithm, and convert to voltage value
+      // Lees el valor analogico mas estable por el filtro de mediana convierte a volts
       averageVoltage = getMedianNum(analogBufferTemp,SCOUNT) * (float)VREF / 1024.0;
       
-      //temperature compensation formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0)); 
+      //compensa por temperatura formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0)); 
       float compensationCoefficient = 1.0+0.02*(temperature-25.0);
       //temperature compensation
       float compensationVoltage=averageVoltage/compensationCoefficient;
       
-      //convert voltage value to tds value
+      // voltage a valalor del tds
       tdsValue=(133.42*compensationVoltage*compensationVoltage*compensationVoltage - 255.86*compensationVoltage*compensationVoltage + 857.39*compensationVoltage)*0.5;
      // conductividad=tdsValue;
       //Serial.print("voltage:");
