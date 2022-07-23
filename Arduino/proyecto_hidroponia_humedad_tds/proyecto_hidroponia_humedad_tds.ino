@@ -5,11 +5,11 @@ rgb_lcd lcd;  //configuracion del LCD RGB
 const int colorR = 255;
 const int colorG = 0;
 const int colorB = 0;
-const int pinTemp = A2;//pin de sensor de temperatura
+const int pinTemp = 2;//pin de sensor de temperatura
 const int B = 3975; //constante del sensor de temperatura
 float valor_temperatura=0;
 
-int pin_sensor_humedad=0;
+int pin_sensor_humedad=3;
 //variables del sensor ph
 float calibration_value = 21.34+3.92; //se añade el segundo valor como ajuste
 int phval = 0; 
@@ -19,7 +19,7 @@ float val_ph=0;
 
 //Sensor conductividad
 #define TdsSensorPin A1
-#define VREF 5.0              // Referencia analogica de 5 V(Volt) del ADC
+#define VREF 5.0              //  Referencia analogica de 5 V(Volt) del ADC
 #define SCOUNT  30            // suma de muestras
 int analogBuffer[SCOUNT];     // arreglo para almacenar los valores analogicos de ADC
 int analogBufferTemp[SCOUNT];
@@ -28,7 +28,7 @@ int copyIndex = 0;
 
 float averageVoltage = 0;
 float tdsValue = 0;
-float temperature = 16;       //temperatura de compensación
+float temperature = 16;       // temperatura de compensación
 
 // algoritmo de filtro de mediana
 int getMedianNum(int bArray[], int iFilterLen){
@@ -75,13 +75,18 @@ void loop() {
 int humedad=analogRead(pin_sensor_humedad);
 funcion_tds();
 funcion_ph();
-Serial.println(humedad);
-Serial.println(val_ph);
-Serial.println(humedad);
-Serial.println(val_ph);
-Serial.println(tdsValue);
-Serial.println("la temperatura es: ");
-Serial.println(valor_temperatura);
+temperatura();
+//Serial.print("valor del ph:");
+//Serial.println(val_ph);
+//Serial.println(humedad);//nivel del agua
+//Serial.print("valor del tds:");
+//Serial.println(tdsValue);
+//Serial.print("la temperatura es: ");
+//Serial.println(valor_temperatura);
+//estructura del envio al puerto serie
+//ph,humedad,tds,temperatura
+Serial.print(val_ph);Serial.print(",");Serial.print(humedad);
+Serial.print(",");Serial.print(tdsValue);Serial.print(",");Serial.println(valor_temperatura);
 delay(1000);
 
 
@@ -89,7 +94,7 @@ delay(1000);
 
 float funcion_tds(){
   static unsigned long analogSampleTimepoint = millis();
-  if(millis()-analogSampleTimepoint > 40U){     //sensa cada 40 mili segundos 
+  if(millis()-analogSampleTimepoint > 40U){     //sensa cada 40 mili segundos el ADC
     analogSampleTimepoint = millis();
     analogBuffer[analogBufferIndex] = analogRead(TdsSensorPin);    //lee el valor analogico y lo almacena en el buffer
     analogBufferIndex++;
@@ -104,23 +109,23 @@ float funcion_tds(){
     for(copyIndex=0; copyIndex<SCOUNT; copyIndex++){
       analogBufferTemp[copyIndex] = analogBuffer[copyIndex];
       
-      // Lees el valor analogico mas estable por el filtro de mediana convierte a volts
+      //Lees el valor analogico mas estable por el filtro de mediana convierte a volts
       averageVoltage = getMedianNum(analogBufferTemp,SCOUNT) * (float)VREF / 1024.0;
       
-      //compensa por temperatura formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0)); 
+      // compensa por temperatura formula: fFinalResult(25^C) = fFinalResult(current)/(1.0+0.02*(fTP-25.0)); 
       float compensationCoefficient = 1.0+0.02*(temperature-25.0);
-      //temperature compensation
+      //compensacion por temperatura
       float compensationVoltage=averageVoltage/compensationCoefficient;
       
-      // voltage a valalor del tds
+      //voltage a valalor del tds
       tdsValue=(133.42*compensationVoltage*compensationVoltage*compensationVoltage - 255.86*compensationVoltage*compensationVoltage + 857.39*compensationVoltage)*0.5;
      // conductividad=tdsValue;
       //Serial.print("voltage:");
       //Serial.print(averageVoltage,2);
       //Serial.print("V   ");
-      Serial.print("TDS Value:");
-      Serial.print(tdsValue,0);
-      Serial.println("ppm");
+     // Serial.print("TDS Value:");
+     // Serial.print(tdsValue,0);
+    //  Serial.println("ppm");
     }
   }
 }
@@ -160,4 +165,5 @@ float temperatura(){
   int val = analogRead(pinTemp);
   float resistance = (float)(1023-val)*10000/val;
 valor_temperatura = 1/(log(resistance/10000)/B+1/298.15)-273.15;
+//return valor_temperatura=valor_temperatura;
 }
